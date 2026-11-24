@@ -1,12 +1,14 @@
 # Portfolio Optimizer
 
+**Live dashboard: https://live-portfolio-optimizer.streamlit.app/**
+
 A Python tool that finds the best way to split money across a set of stocks and funds, using **mean-variance (Markowitz) optimization**. It downloads real market data, stores it in a SQL database, measures each asset's return and risk, and solves a constrained optimization problem to find the lowest-risk and best risk-adjusted portfolios.
 
 ![Efficient frontier](outputs/efficient_frontier.png)
 
 ## Interactive dashboard
 
-`app.py` is a Streamlit dashboard: pick any assets (or type your own tickers), a date range, a risk-free rate and a per-asset limit, and it shows:
+`app.py` is a Streamlit dashboard, [deployed on Streamlit Community Cloud](https://live-portfolio-optimizer.streamlit.app/): pick any assets (or type your own tickers), a date range, a risk-free rate and a per-asset limit, and it shows:
 
 - the **optimal allocations** for the equal-weight, minimum-volatility and maximum-Sharpe portfolios
 - a **risk vs. return chart** with the efficient frontier and every asset
@@ -65,6 +67,6 @@ Python · pandas · NumPy · SciPy · SQLite · Matplotlib · Plotly · Streamli
 
 - ~~Backtest: choose weights on 2019–2023 data and test them on 2024–2026~~ (done: `backtest.py`)
 - ~~Interactive Streamlit dashboard~~ (done: `app.py`)
-- Deploy the dashboard publicly on Streamlit Community Cloud
+- ~~Deploy the dashboard publicly on Streamlit Community Cloud~~ (done: [live link](https://live-portfolio-optimizer.streamlit.app/))
 
 *This is an educational project, not investment advice.*
