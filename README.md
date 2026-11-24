@@ -4,6 +4,16 @@ A Python tool that finds the best way to split money across a set of stocks and 
 
 ![Efficient frontier](outputs/efficient_frontier.png)
 
+## Interactive dashboard
+
+`app.py` is a Streamlit dashboard: pick any assets (or type your own tickers), a date range, a risk-free rate and a per-asset limit, and it shows:
+
+- the **optimal allocations** for the equal-weight, minimum-volatility and maximum-Sharpe portfolios
+- a **risk vs. return chart** with the efficient frontier and every asset
+- how $1 would have grown in each portfolio, plus per-asset stats and a correlation table
+
+![Dashboard](images/dashboard.png)
+
 ## Results
 
 Analyzed 8 assets (Apple, Microsoft, JPMorgan, Johnson & Johnson, Exxon, Procter & Gamble, gold, and long-term US bonds) using daily prices from 2019 to 2026.
@@ -20,7 +30,7 @@ Key findings:
 - **Equal weights is not efficient.** It sits below the efficient frontier: for the same level of risk, an optimized portfolio offers a higher expected return.
 - **Gold and bonds play different roles.** The max Sharpe portfolio holds about 40% gold, because gold had decent returns and moved independently of stocks. Long-term bonds (TLT) lost value as interest rates rose after 2021, so the optimizer only uses them to reduce risk, not to earn return.
 
-> **Limitation:** these results are *in-sample*: the portfolios were chosen using the same data they are evaluated on, so they look better than they would in real life. A backtest on unseen data is the next step.
+> **Limitation:** these results are *in-sample*: the portfolios were chosen using the same data they are evaluated on, so they look better than they would in real life. `backtest.py` tests the method on data the optimizer never saw.
 
 ## How it works
 
@@ -31,6 +41,7 @@ Key findings:
    - **Objective:** minimize volatility, or maximize the Sharpe ratio (return per unit of risk)
    - **Constraints:** weights sum to 100%, no short selling, and at most 40% in any single asset
 4. **Output** (`main.py`): prints the results, saves the weights to `outputs/weights.csv`, and plots the efficient frontier.
+5. **Dashboard** (`app.py`): runs the same pipeline interactively in the browser with Streamlit and Plotly. Prices already in the database are read with SQL; anything missing is downloaded and saved first.
 
 ## Run it yourself
 
@@ -40,18 +51,20 @@ cd portfolio-optimizer
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python main.py
+python main.py           # command-line results and charts
+streamlit run app.py     # interactive dashboard in your browser
 ```
 
 To try different stocks, dates, or limits, edit `config.py`.
 
 ## Tech stack
 
-Python · pandas · NumPy · SciPy · SQLite · Matplotlib · yfinance
+Python · pandas · NumPy · SciPy · SQLite · Matplotlib · Plotly · Streamlit · yfinance
 
 ## Next steps
 
-- Backtest: choose weights on 2019–2023 data and test them on 2024–2026
-- Interactive Streamlit dashboard
+- ~~Backtest: choose weights on 2019–2023 data and test them on 2024–2026~~ (done: `backtest.py`)
+- ~~Interactive Streamlit dashboard~~ (done: `app.py`)
+- Deploy the dashboard publicly on Streamlit Community Cloud
 
 *This is an educational project, not investment advice.*
