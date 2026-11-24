@@ -34,6 +34,24 @@ Key findings:
 
 > **Limitation:** these results are *in-sample*: the portfolios were chosen using the same data they are evaluated on, so they look better than they would in real life. `backtest.py` tests the method on data the optimizer never saw.
 
+## Backtest on unseen data
+
+`backtest.py` chooses the weights using only **2019–2023** prices, then freezes them and checks what actually happened from **January 2024 to October 2026** (711 trading days the optimizer never saw).
+
+| Portfolio | Annual return | Volatility | Sharpe ratio | Total growth |
+|---|---|---|---|---|
+| Equal weights (baseline) | 19.1% | 10.0% | 1.51 | +69% |
+| Minimum volatility | 14.7% | 10.0% | 1.07 | +49% |
+| Maximum Sharpe ratio | 23.3% | 16.3% | 1.18 | +86% |
+
+![Backtest growth of $1](outputs/backtest_growth.png)
+
+What this shows:
+
+- **Max Sharpe grew the most, but with 63% more volatility** than equal weights. Its result came from taking more risk, not from better risk-adjusted returns.
+- **Min volatility didn't end up less risky than equal weights** (both 10.0%). It held 35% in long-term bonds, and the low risk it expected from 2019–2023 data didn't carry over.
+- **Equal weights had the best Sharpe ratio.** The optimizer treats past average returns and correlations as if they were exact, but they are noisy estimates, so "optimal" weights can overfit the past. Simple equal weighting is a well-known hard baseline to beat (DeMiguel, Garlappi & Uppal, 2009, *Optimal Versus Naive Diversification*).
+
 ## How it works
 
 1. **Data** (`data.py`): downloads daily prices from Yahoo Finance, saves them to a SQLite database, and reads them back with SQL queries.
@@ -66,6 +84,7 @@ Python · pandas · NumPy · SciPy · SQLite · Matplotlib · Plotly · Streamli
 ## Next steps
 
 - ~~Backtest: choose weights on 2019–2023 data and test them on 2024–2026~~ (done: `backtest.py`)
+- Make the optimizer more robust to noisy estimates (e.g. shrinkage of the covariance matrix)
 - ~~Interactive Streamlit dashboard~~ (done: `app.py`)
 - ~~Deploy the dashboard publicly on Streamlit Community Cloud~~ (done: [live link](https://live-portfolio-optimizer.streamlit.app/))
 

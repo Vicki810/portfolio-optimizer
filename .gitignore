@@ -2,3 +2,7 @@
 __pycache__/
 portfolio.db
 .DS_Store
+
+# AI coding tool settings (not project code)
+.agents/
+.claude/
